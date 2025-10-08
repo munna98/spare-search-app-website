@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spare Parts Search App - Lightning-Fast Inventory Management for UAE Auto Dealers</title>
+    <meta name="description"
+        content="Professional spare parts search and inventory management software for UAE auto retailers, distributors, and B2B dealers. Search thousands of parts instantly.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #2563eb;
+            --dark-blue: #1e40af;
+            --light-blue: #dbeafe;
+            --accent-blue: #3b82f6;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 1001;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .logo-main {
+            font-size: 1.1rem;
+        }
+
+        .logo-sub {
+            font-size: 0.7rem;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a {
+            color: var(--gray-800);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-cta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .cta-button {
+            background: var(--primary-blue);
+            color: white;
+            padding: 0.65rem 1.25rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .cta-button:hover {
+            background: var(--dark-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.75rem;
+            cursor: pointer;
+            color: var(--gray-800);
+            z-index: 1001;
+            padding: 0.25rem;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+            padding: 5rem 2rem 2rem;
+            transition: right 0.3s ease;
+            z-index: 999;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+        }
+
+        .mobile-menu ul li {
+            margin-bottom: 1.5rem;
+        }
+
+        .mobile-menu ul li a {
+            color: var(--gray-800);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            display: block;
+            padding: 0.5rem 0;
+        }
+
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+        }
+
+
+        /* Fix for Request Demo button inside mobile menu */
+        .mobile-menu .cta-button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: var(--primary, #007bff);
+            /* fallback color if you use CSS variables */
+            color: #fff !important;
+            padding: 0.9rem 0;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+            transition: background 0.3s ease, transform 0.2s ease;
+            margin-top: 1.5rem;
+        }
+
+        .mobile-menu .cta-button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Hide desktop button on small screens */
+        @media (max-width: 768px) {
+            .nav-cta .cta-button {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+
+        /* Story Section */
+        .story {
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(37,99,235,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.5;
+        }
+
+        .story-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .story-badge {
+            display: inline-block;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .story-container h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            line-height: 1.3;
+            margin-bottom: 1.5rem;
+        }
+
+        .story-text {
+            font-size: 1.15rem;
+            color: var(--gray-600);
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .pain-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .pain-point {
+            background: rgba(239, 68, 68, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid #ef4444;
+            font-size: 0.95rem;
+            color: var(--gray-700);
+        }
+
+        .solution-intro {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin: 2rem 0 1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 2rem;
+            background: white;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content .highlight {
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content p {
+            font-size: 1.15rem;
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .secondary-button {
+            background: white;
+            color: var(--primary-blue);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid var(--primary-blue);
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .secondary-button:hover {
+            background: var(--light-blue);
+            transform: translateY(-2px);
+        }
+
+        /* Animated Demo */
+        .demo-container {
+            position: relative;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            padding: 2rem;
+            min-height: 400px;
+        }
+
+        .demo-search-bar {
+            background: var(--gray-50);
+            border: 2px solid var(--gray-100);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            transition: border-color 0.3s;
+        }
+
+        .demo-search-bar.active {
+            border-color: var(--primary-blue);
+        }
+
+        .demo-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-input {
+            font-size: 1.1rem;
+            color: var(--gray-900);
+            font-weight: 500;
+            min-height: 1.5rem;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2rem;
+            background: var(--primary-blue);
+            margin-left: 2px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .demo-results {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
+        }
+
+        .demo-results.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .demo-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .demo-table th {
+            background: var(--gray-100);
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-200);
+        }
+
+        .demo-table td {
+            padding: 0.75rem;
+            border: 1px solid var(--gray-200);
+        }
+
+        .demo-table tr:nth-child(even) {
+            background: var(--light-blue);
+        }
+
+        .demo-brand {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .demo-price {
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        /* Trust Indicators */
+        .trust-bar {
+            background: white;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .trust-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .trust-item {
+            text-align: center;
+        }
+
+        .trust-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+        }
+
+        .trust-label {
+            color: var(--gray-600);
+            font-size: 0.85rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 2rem;
+            background: white;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--gray-600);
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--gray-50);
+            padding: 2rem;
+            border-radius: 16px;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.15);
+            border-color: var(--light-blue);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--gray-600);
+            line-height: 1.8;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, var(--gray-50) 0%, white 100%);
+        }
+
+        .steps-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            gap: 3rem;
+        }
+
+        .step {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: 800;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            font-size: 1.5rem;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: var(--gray-600);
+            line-height: 1.8;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 6rem 2rem;
+            background: white;
+        }
+
+        .testimonials-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--gray-50);
+            padding: 2rem;
+            border-radius: 16px;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .testimonial-content {
+            font-style: italic;
+            color: var(--gray-600);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .author-info h4 {
+            color: var(--gray-900);
+            font-size: 1rem;
+        }
+
+        .author-info p {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: white;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button-white {
+            background: white;
+            color: var(--primary-blue);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .cta-button-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Contact Form */
+        .contact {
+            padding: 6rem 2rem;
+            background: var(--gray-50);
+        }
+
+        .contact-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--gray-100);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-button {
+            width: 100%;
+            background: var(--primary-blue);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-button:hover {
+            background: var(--dark-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--gray-900);
+            color: white;
+            padding: 3rem 2rem 1rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            z-index: 999;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 968px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav-cta .cta-button {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .story-container h1 {
+                font-size: 2rem;
+            }
+
+            .story-text {
+                font-size: 1rem;
+            }
+
+            .pain-points {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .cta-content h2 {
+                font-size: 2rem;
+            }
+
+            .step {
+                grid-template-columns: 60px 1fr;
+                gap: 1.5rem;
+            }
+
+            .step-number {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .contact-container {
+                padding: 2rem;
+            }
+
+            .trust-number {
+                font-size: 1.75rem;
+            }
+
+            .demo-container {
+                padding: 1.5rem;
+            }
+
+            .demo-table {
+                font-size: 0.8rem;
+            }
+
+            .demo-table th,
+            .demo-table td {
+                padding: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-main {
+                font-size: 0.95rem;
+            }
+
+            .logo-sub {
+                font-size: 0.65rem;
+            }
+
+            .logo-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .nav-container {
+                padding: 1rem;
+            }
+
+            .story {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .hero {
+                padding: 3rem 1.5rem;
+            }
+
+            .features,
+            .how-it-works,
+            .testimonials,
+            .cta-section,
+            .contact {
+                padding: 4rem 1.5rem;
+            }
+
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">SP</div>
+                <div class="logo-text">
+                    <span class="logo-main">Spare Parts Search App</span>
+                    <span class="logo-sub">Inventory Management</span>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="https://wa.me/918086094070?text=Hi!%20I%27d%20like%20to%20request%20a%20demo%20of%20Spare%20Parts%20Search%20Pro"
+                    class="cta-button">Request Demo</a>
+                <button class="mobile-menu-btn" id="menuBtn">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="#features" class="mobile-link">Features</a></li>
+            <li><a href="#how-it-works" class="mobile-link">How It Works</a></li>
+            <li><a href="#testimonials" class="mobile-link">Testimonials</a></li>
+            <li><a href="#contact" class="mobile-link">Contact</a></li>
+            <li><a href="https://wa.me/918086094070?text=Hi!%20I%27d%20like%20to%20request%20a%20demo%20of%20Spare%20Parts%20Search%20Pro"
+                    class="cta-button" style="display: inline-block; margin-top: 1rem;">Request Demo</a></li>
+        </ul>
+    </div>
+
+    <!-- Story Section -->
+    <section class="story">
+        <div class="story-container">
+            <div class="story-badge">🚗 For UAE Auto Parts Professionals</div>
+            <h1>Ever Spent Hours Searching for a Single Part Number?</h1>
+            <p class="story-text">
+                You open Excel file after Excel file. Ctrl+F through endless rows. Switch between tabs. Check multiple
+                supplier sheets. Your customer is waiting on the line. Time is ticking. The part number must be
+                somewhere...
+            </p>
+
+            <div class="pain-points">
+                <div class="pain-point">
+                    ❌ Wasting 10-15 minutes per search
+                </div>
+                <div class="pain-point">
+                    ❌ Losing customers due to slow response
+                </div>
+                <div class="pain-point">
+                    ❌ Juggling multiple Excel files
+                </div>
+                <div class="pain-point">
+                    ❌ Making costly pricing errors
+                </div>
+            </div>
+
+            <p class="solution-intro">
+                What if you could find ANY part in under 1 second?
+            </p>
+        </div>
+    </section>
+
+    <!-- Hero Section with Demo -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h2>Search <span class="highlight">100,000+ Parts</span> Instantly</h2>
+                <p>Professional inventory management software designed for UAE auto parts retailers, distributors, and
+                    B2B dealers. Import your Excel catalogues and search with lightning speed.</p>
+                <div class="hero-buttons">
+                    <a href="https://wa.me/918086094070?text=Hi!%20I%27d%20like%20to%20request%20a%20demo%20of%20Spare%20Parts%20Search%20Pro"
+                        class="cta-button">Request Free Demo →</a>
+                    <a href="#features" class="secondary-button">See Features</a>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="demo-search-bar" id="demoSearchBar">
+                    <div class="demo-label">Part Number</div>
+                    <div class="demo-input" id="demoInput"></div>
+                </div>
+                <div class="demo-results" id="demoResults">
+                    <table class="demo-table">
+                        <thead>
+                            <tr>
+                                <th>Part Number</th>
+                                <th>Brand</th>
+                                <th>Description</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1K1819669</td>
+                                <td class="demo-brand">VW/AUDI</td>
+                                <td>Od. filter</td>
+                                <td class="demo-price">AED 170.47</td>
+                            </tr>
+                            <tr>
+                                <td>1K1819669</td>
+                                <td class="demo-brand">VW/AUDI SNP</td>
+                                <td>Od. filter</td>
+                                <td class="demo-price">AED 121.00</td>
+                            </tr>
+                            <tr>
+                                <td>1K1819669</td>
+                                <td class="demo-brand">VW/AUDI/SND</td>
+                                <td>Od. filter</td>
+                                <td class="demo-price">AED 121.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <div class="trust-bar">
+        <div class="trust-container">
+            <div class="trust-item">
+                <div class="trust-number">100K+</div>
+                <div class="trust-label">Parts Searchable</div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-number">&lt;1s</div>
+                <div class="trust-label">Search Speed</div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-number">Multi-Brand</div>
+                <div class="trust-label">Support</div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-number">Offline</div>
+                <div class="trust-label">Capable</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="section-header">
+            <h2>Powerful Features for Your Business</h2>
+            <p>Everything you need to manage your spare parts inventory efficiently</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Lightning-Fast Search</h3>
+                <p>Find any part in milliseconds with our advanced search algorithm. Support for exact match, starts
+                    with, ends with, and contains modes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Excel Import</h3>
+                <p>Import your existing Excel catalogues seamlessly. Supports multiple brands and automatically extracts
+                    pricing with VAT.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>Multi-Brand Support</h3>
+                <p>Manage parts from multiple brands in one place. Perfect for dealers handling VW, Audi, Toyota, and
+                    more.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💾</div>
+                <h3>Local Database</h3>
+                <p>All data stored locally on your computer. No internet required for searching. Your data stays private
+                    and secure.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📋</div>
+                <h3>One-Click Copy</h3>
+                <p>Copy part numbers instantly to clipboard. Streamline your workflow when communicating with suppliers.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Smart Filtering</h3>
+                <p>Advanced search modes help you find exactly what you need. Perfect for cross-referencing and
+                    verification.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="section-header">
+            <h2>How It Works</h2>
+            <p>Get started in minutes, not hours</p>
+        </div>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Import Your Catalogues</h3>
+                    <p>Simply drag and drop your Excel files containing parts data. The software automatically processes
+                        and indexes thousands of parts in seconds.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Search & Find</h3>
+                    <p>Type any part number or description. Get instant results with brand, description, and pricing
+                        including VAT. Use smart filters for precise results.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Serve Customers Faster</h3>
+                    <p>Provide instant quotes to your customers. Copy part numbers with one click. Reduce search time
+                        from minutes to seconds.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="testimonials">
+        <div class="section-header">
+            <h2>What Our Clients Say</h2>
+            <p>Trusted by auto spare parts businesses across UAE</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    "This software has transformed our business. We can now respond to customer inquiries in seconds
+                    instead of minutes. Our sales have increased by 40% since we started using it."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">AK</div>
+                    <div class="author-info">
+                        <h4>Jaleel Ahmed</h4>
+                        <p>Founder, Lavender Auto Parts LLC</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    "Managing multiple brand catalogues was a nightmare before. Now everything is in one place. The
+                    search is incredibly fast and accurate. Best investment we've made."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">MS</div>
+                    <div class="author-info">
+                        <h4>Mohammed Salem</h4>
+                        <p>Manager, Sharjah Spare Parts Trading</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    "The Excel import feature is brilliant. We imported 50,000 parts in under 5 minutes. Our staff loves
+                    how easy it is to use. Highly recommended for any parts dealer."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">RK</div>
+                    <div class="author-info">
+                        <h4>Rajesh Kumar</h4>
+                        <p>Director, Abu Dhabi Motors</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Transform Your Business?</h2>
+            <p>Join leading auto parts dealers in UAE who are already saving hours every day</p>
+            <a href="https://wa.me/918086094070?text=Hi!%20I%27d%20like%20to%20request%20a%20demo%20of%20Spare%20Parts%20Search%20Pro"
+                class="cta-button-white">Request Your Free Demo Now →</a>
+        </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section id="contact" class="contact">
+        <div class="section-header">
+            <h2>Get In Touch</h2>
+            <p>Have questions? We're here to help</p>
+        </div>
+        <div class="contact-container">
+            <form id="contactForm">
+                <div class="form-group">
+                    <label>Your Name *</label>
+                    <input type="text" id="name" required placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label>Business Name *</label>
+                    <input type="text" id="business" required placeholder="Enter your business name">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" id="phone" required placeholder="+971 XX XXX XXXX">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Message *</label>
+                    <textarea id="message" required placeholder="Tell us about your requirements..."></textarea>
+                </div>
+                <button type="submit" class="submit-button">Send</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Spare Parts Search App</h3>
+                <p style="color: rgba(255, 255, 255, 0.7); margin-top: 1rem;">Professional spare parts inventory
+                    management software for UAE auto dealers.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><a href="https://wa.me/918086094070">📱 +91 80860 94070</a></li>
+                    <li><a href="https://wa.me/918086094070">💬 WhatsApp</a></li>
+                    <li style="color: rgba(255, 255, 255, 0.7);">🇦🇪 Serving UAE Businesses</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Business Hours</h3>
+                <ul>
+                    <li style="color: rgba(255, 255, 255, 0.7);">Monday - Saturday</li>
+                    <li style="color: rgba(255, 255, 255, 0.7);">9:00 AM - 6:00 PM GST</li>
+                    <li style="color: rgba(255, 255, 255, 0.7);">Quick Response Time</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Spare Parts Search App. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/918086094070?text=Hi!%20I%27m%20interested%20in%20Spare%20Parts%20Search%20Pro"
+        class="whatsapp-float" title="Chat on WhatsApp">
+        💬
+    </a>
+
+    <script>
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+            mobileOverlay.style.display = mobileMenu.classList.contains('active') ? 'block' : 'none';
+            menuBtn.textContent = mobileMenu.classList.contains('active') ? '✕' : '☰';
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        mobileOverlay.addEventListener('click', toggleMenu);
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Typing Animation for Demo
+        const demoInput = document.getElementById('demoInput');
+        const demoResults = document.getElementById('demoResults');
+        const demoSearchBar = document.getElementById('demoSearchBar');
+        const partNumber = '1K1819669';
+        let charIndex = 0;
+
+        function typeCharacter() {
+            if (charIndex < partNumber.length) {
+                demoInput.textContent = partNumber.substring(0, charIndex + 1);
+                demoInput.innerHTML += '<span class="typing-cursor"></span>';
+                charIndex++;
+                setTimeout(typeCharacter, 150);
+            } else {
+                setTimeout(() => {
+                    demoInput.innerHTML = partNumber;
+                    demoSearchBar.classList.add('active');
+                    setTimeout(() => {
+                        demoResults.classList.add('show');
+                    }, 300);
+                }, 500);
+            }
+        }
+
+        // Start animation when demo is in viewport
+        const demoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && charIndex === 0) {
+                    setTimeout(() => {
+                        typeCharacter();
+                    }, 500);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const demoContainer = document.querySelector('.demo-container');
+        if (demoContainer) {
+            demoObserver.observe(demoContainer);
+        }
+
+        // Contact form submission to WhatsApp
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const business = document.getElementById('business').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            // Create WhatsApp message
+            let whatsappMessage = `*New Contact Request*%0A%0A`;
+            whatsappMessage += `*Name:* ${encodeURIComponent(name)}%0A`;
+            whatsappMessage += `*Business:* ${encodeURIComponent(business)}%0A`;
+            whatsappMessage += `*Phone:* ${encodeURIComponent(phone)}%0A`;
+            if (email) {
+                whatsappMessage += `*Email:* ${encodeURIComponent(email)}%0A`;
+            }
+            whatsappMessage += `%0A*Message:*%0A${encodeURIComponent(message)}`;
+
+            // Open WhatsApp with the message
+            window.open(`https://wa.me/918086094070?text=${whatsappMessage}`, '_blank');
+
+            // Reset form
+            this.reset();
+
+            // Show success message
+            alert('Thank you! Redirecting to WhatsApp...');
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all feature cards and testimonials
+        document.querySelectorAll('.feature-card, .testimonial-card, .step').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>
